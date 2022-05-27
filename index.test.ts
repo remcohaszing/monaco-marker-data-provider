@@ -161,6 +161,39 @@ test('clear marker data for disposed models', async () => {
   expect(markers).toStrictEqual([]);
 });
 
+test('provide marker data if the model language changes', async () => {
+  const uri = monaco.Uri.parse('file:///test.bla');
+  monaco.editor.createModel('bad', undefined, uri);
+
+  await waitForMarkers(() => {
+    disposable = registerMarkerDataProvider(monaco, 'bla', {
+      owner: 'test',
+      provideMarkerData,
+    });
+  });
+
+  const markers = await waitForMarkers(() => {
+    monaco.languages.register({ id: 'bla', extensions: ['.bla'] });
+  });
+
+  expect(markers).toStrictEqual([
+    {
+      code: undefined,
+      endColumn: 4,
+      endLineNumber: 1,
+      message: 'test message',
+      owner: 'test',
+      relatedInformation: undefined,
+      resource: uri,
+      severity: monaco.MarkerSeverity.Error,
+      source: undefined,
+      startColumn: 1,
+      startLineNumber: 1,
+      tags: undefined,
+    },
+  ]);
+});
+
 test('language filter string match', async () => {
   const uri = monaco.Uri.parse('file:///test.txt');
   monaco.editor.createModel('bad', 'plaintext', uri);

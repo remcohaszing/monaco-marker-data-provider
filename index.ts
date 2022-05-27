@@ -33,7 +33,7 @@ export interface MarkerDataProvider {
  * @returns A disposable.
  */
 export function registerMarkerDataProvider(
-  monaco: Pick<typeof import('monaco-editor'), 'editor'>,
+  monaco: Pick<typeof import('monaco-editor'), 'editor' | 'Uri'>,
   languageSelector: string[] | string,
   provider: MarkerDataProvider,
 ): IDisposable {
@@ -105,8 +105,8 @@ export function registerMarkerDataProvider(
 
   return {
     dispose() {
-      for (const listener of listeners.values()) {
-        listener.dispose();
+      for (const uri of listeners.keys()) {
+        onModelRemoved(monaco.editor.getModel(monaco.Uri.parse(uri))!);
       }
       while (disposables.length) {
         disposables.pop()!.dispose();
