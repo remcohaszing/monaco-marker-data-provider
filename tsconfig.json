@@ -6,6 +6,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
+    "skipLibCheck": true,
     "strict": true,
     "stripInternal": true,
     "target": "esnext"
