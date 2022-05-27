@@ -28,27 +28,37 @@ export interface MarkerDataProvider {
  * Register a marker data provider that can provide marker data for a model.
  *
  * @param monaco - The Monaco editor module.
- * @param languageId - The language id to register the provider for.
+ * @param languageSelector - The language id to register the provider for.
  * @param provider - The provider that can provide marker data.
  * @returns A disposable.
  */
 export function registerMarkerDataProvider(
   monaco: Pick<typeof import('monaco-editor'), 'editor'>,
-  languageId: string,
+  languageSelector: string[] | string,
   provider: MarkerDataProvider,
 ): IDisposable {
   const listeners = new Map<string, IDisposable>();
 
+  const matchesLanguage = (model: editor.ITextModel): boolean => {
+    if (languageSelector === '*') {
+      return true;
+    }
+    const languageId = model.getLanguageId();
+    return Array.isArray(languageSelector)
+      ? languageSelector.includes(languageId)
+      : languageSelector === languageId;
+  };
+
   const doValidate = async (model: editor.ITextModel): Promise<void> => {
     const markers = await provider.provideMarkerData(model);
     // The model have have been disposed by the time marker data has been fetched.
-    if (!model.isDisposed() && model.getLanguageId() === languageId) {
+    if (!model.isDisposed() && matchesLanguage(model)) {
       monaco.editor.setModelMarkers(model, provider.owner, markers ?? []);
     }
   };
 
-  const onModelAdd = (model: editor.IModel): void => {
-    if (model.getLanguageId() !== languageId) {
+  const onModelAdd = (model: editor.ITextModel): void => {
+    if (!matchesLanguage(model)) {
       return;
     }
 
@@ -66,7 +76,7 @@ export function registerMarkerDataProvider(
     doValidate(model);
   };
 
-  const onModelRemoved = (model: editor.IModel): void => {
+  const onModelRemoved = (model: editor.ITextModel): void => {
     monaco.editor.setModelMarkers(model, provider.owner, []);
     const uriStr = String(model.uri);
     const listener = listeners.get(uriStr);
