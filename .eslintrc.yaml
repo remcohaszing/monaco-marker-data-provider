@@ -6,6 +6,7 @@ rules:
   '@typescript-eslint/no-unsafe-assignment': off
 
   import/extensions: off
+  import/no-extraneous-dependencies: off
   import/no-unresolved: off
 
   jsdoc/require-jsdoc: off
