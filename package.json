@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "Provide Monaco marker data in a similar way as other integrations",
   "type": "module",
+  "exports": "./index.js",
   "scripts": {
     "prepack": "tsc --noEmit false",
     "start": "vitest",
