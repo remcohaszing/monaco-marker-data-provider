@@ -24,6 +24,9 @@
     "url": "https://github.com/remcohaszing/monaco-marker-data-provider/issues"
   },
   "homepage": "https://github.com/remcohaszing/monaco-marker-data-provider#readme",
+  "funding": {
+    "url": "https://github.com/sponsors/remcohaszing"
+  },
   "files": [
     "index.js",
     "index.d.ts"
