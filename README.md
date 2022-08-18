@@ -66,4 +66,4 @@ An object with the following properties:
 
 ## License
 
-[MIT](https://github.com/remcohaszing/monaco-marker-data-provider/blob/main/LICENSE.md)
+[MIT](LICENSE.md) © [Remco Haszing](https://github.com/remcohaszing)
