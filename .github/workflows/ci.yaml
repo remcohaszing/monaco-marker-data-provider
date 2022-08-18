@@ -10,8 +10,8 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with: { node-version: 16 }
       - run: npm ci
       - run: npx eslint .
@@ -19,8 +19,8 @@ jobs:
   pack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with: { node-version: 16 }
       - run: npm ci
       - run: npm pack
@@ -28,8 +28,8 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with: { node-version: 16 }
       - run: npm ci
       - run: npx prettier --check .
@@ -37,8 +37,8 @@ jobs:
   tsc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with: { node-version: 16 }
       - run: npm ci
       - run: npx tsc
@@ -46,9 +46,9 @@ jobs:
   vitest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with: { node-version: 16 }
       - run: npm ci
       - run: npx vitest run --coverage
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
