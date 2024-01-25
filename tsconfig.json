@@ -9,6 +9,6 @@
     "skipLibCheck": true,
     "strict": true,
     "stripInternal": true,
-    "target": "esnext"
-  }
+    "target": "esnext",
+  },
 }

@@ -1,4 +1,4 @@
-import { editor, IDisposable, languages } from 'monaco-editor';
+import { type editor, type IDisposable, type languages } from 'monaco-editor';
 
 export interface MarkerDataProvider {
   /**
@@ -11,15 +11,18 @@ export interface MarkerDataProvider {
   /**
    * Provide marker data for the given model.
    *
-   * @param model The model to provide marker data for.
-   * @returns The new marker data for the model.
+   * @param model
+   *   The model to provide marker data for.
+   * @returns
+   *   The new marker data for the model.
    */
   provideMarkerData: (model: editor.ITextModel) => languages.ProviderResult<editor.IMarkerData[]>;
 
   /**
    * Reset the state for a model.
    *
-   * @param model The model to reset the state for.
+   * @param model
+   *   The model to reset the state for.
    */
   doReset?: (model: editor.ITextModel) => void;
 }
@@ -27,10 +30,14 @@ export interface MarkerDataProvider {
 /**
  * Register a marker data provider that can provide marker data for a model.
  *
- * @param monaco The Monaco editor module.
- * @param languageSelector The language id to register the provider for.
- * @param provider The provider that can provide marker data.
- * @returns A disposable.
+ * @param monaco
+ *   The Monaco editor module.
+ * @param languageSelector
+ *   The language id to register the provider for.
+ * @param provider
+ *   The provider that can provide marker data.
+ * @returns
+ *   A disposable.
  */
 export function registerMarkerDataProvider(
   monaco: Pick<typeof import('monaco-editor'), 'editor' | 'Uri'>,

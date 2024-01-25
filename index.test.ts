@@ -1,15 +1,7 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { afterEach, expect, test } from 'vitest';
 
-import { registerMarkerDataProvider } from '.';
-
-window.matchMedia = () =>
-  ({
-    matches: false,
-    addEventListener() {
-      // We don’t actualy use this function.
-    },
-  } as Partial<MediaQueryList> as MediaQueryList);
+import { registerMarkerDataProvider } from './index.js';
 
 let disposable: monaco.IDisposable | undefined;
 
