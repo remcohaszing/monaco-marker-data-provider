@@ -40,11 +40,11 @@ export interface MarkerDataProvider {
  *   A disposable.
  */
 export function registerMarkerDataProvider(
-  monaco: Pick<MonacoEditor, 'editor' | 'Uri'>,
+  monaco: Pick<MonacoEditor, 'editor'>,
   languageSelector: string[] | string,
   provider: MarkerDataProvider
 ): IDisposable {
-  const listeners = new Map<string, IDisposable>()
+  const listeners = new Map<editor.ITextModel, IDisposable>()
 
   const matchesLanguage = (model: editor.ITextModel): boolean => {
     if (languageSelector === '*') {
@@ -71,7 +71,7 @@ export function registerMarkerDataProvider(
 
     let handle: ReturnType<typeof setTimeout>
     listeners.set(
-      String(model.uri),
+      model,
       model.onDidChangeContent(() => {
         clearTimeout(handle)
         handle = setTimeout(() => {
@@ -85,11 +85,10 @@ export function registerMarkerDataProvider(
 
   const onModelRemoved = (model: editor.ITextModel): void => {
     monaco.editor.setModelMarkers(model, provider.owner, [])
-    const uriStr = String(model.uri)
-    const listener = listeners.get(uriStr)
+    const listener = listeners.get(model)
     if (listener) {
       listener.dispose()
-      listeners.delete(uriStr)
+      listeners.delete(model)
     }
   }
 
@@ -112,8 +111,8 @@ export function registerMarkerDataProvider(
 
   return {
     dispose() {
-      for (const uri of listeners.keys()) {
-        onModelRemoved(monaco.editor.getModel(monaco.Uri.parse(uri))!)
+      for (const model of listeners.keys()) {
+        onModelRemoved(model)
       }
       while (disposables.length) {
         disposables.pop()!.dispose()
