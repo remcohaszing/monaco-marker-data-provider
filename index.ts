@@ -92,18 +92,16 @@ export function registerMarkerDataProvider(
     }
   }
 
-  const disposables = [
-    monaco.editor.onDidCreateModel(onModelAdd),
-    monaco.editor.onWillDisposeModel((model) => {
-      onModelRemoved(model)
-      provider.doReset?.(model)
-    }),
-    monaco.editor.onDidChangeModelLanguage((event) => {
-      onModelRemoved(event.model)
-      onModelAdd(event.model)
-      provider.doReset?.(event.model)
-    })
-  ]
+  const onDidCreateModel = monaco.editor.onDidCreateModel(onModelAdd)
+  const onWillDisposeModel = monaco.editor.onWillDisposeModel((model) => {
+    onModelRemoved(model)
+    provider.doReset?.(model)
+  })
+  const onDidChangeModelLanguage = monaco.editor.onDidChangeModelLanguage((event) => {
+    onModelRemoved(event.model)
+    onModelAdd(event.model)
+    provider.doReset?.(event.model)
+  })
 
   for (const model of monaco.editor.getModels()) {
     onModelAdd(model)
@@ -114,9 +112,9 @@ export function registerMarkerDataProvider(
       for (const model of listeners.keys()) {
         onModelRemoved(model)
       }
-      while (disposables.length) {
-        disposables.pop()!.dispose()
-      }
+      onDidCreateModel.dispose()
+      onWillDisposeModel.dispose()
+      onDidChangeModelLanguage.dispose()
     }
   }
 }
