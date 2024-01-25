@@ -26,18 +26,18 @@ npm install monaco-editor monaco-marker-data-provider
 ## Usage
 
 ```typescript
-import * as monaco from 'monaco-editor';
-import { registerMarkerDataProvider } from 'monaco-marker-data-provider';
+import * as monaco from 'monaco-editor'
+import { registerMarkerDataProvider } from 'monaco-marker-data-provider'
 
-import { myCustomValidator } from './myCustomValidator';
+import { myCustomValidator } from './myCustomValidator'
 
 registerMarkerDataProvider(monaco, 'plaintext', {
   owner: 'my-custom-markers',
 
   provideMarkerData(model) {
-    return myCustomValidator(model.getValue());
-  },
-});
+    return myCustomValidator(model.getValue())
+  }
+})
 ```
 
 ## API

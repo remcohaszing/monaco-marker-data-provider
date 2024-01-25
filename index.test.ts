@@ -1,25 +1,25 @@
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { afterEach, expect, test } from 'vitest';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import { afterEach, expect, test } from 'vitest'
 
-import { registerMarkerDataProvider } from './index.js';
+import { registerMarkerDataProvider } from './index.js'
 
-let disposable: monaco.IDisposable | undefined;
+let disposable: monaco.IDisposable | undefined
 
 afterEach(() => {
-  disposable?.dispose();
+  disposable?.dispose()
   for (const model of monaco.editor.getModels()) {
-    model.dispose();
+    model.dispose()
   }
-});
+})
 
 function provideMarkerData(model: monaco.editor.ITextModel): monaco.editor.IMarkerData[] {
-  const value = model.getValue();
-  const index = value.indexOf('bad');
+  const value = model.getValue()
+  const index = value.indexOf('bad')
   if (index === -1) {
-    return [];
+    return []
   }
-  const start = model.getPositionAt(index);
-  const end = model.getPositionAt(index + 3);
+  const start = model.getPositionAt(index)
+  const end = model.getPositionAt(index + 3)
   return [
     {
       endColumn: end.column,
@@ -27,36 +27,36 @@ function provideMarkerData(model: monaco.editor.ITextModel): monaco.editor.IMark
       message: 'test message',
       severity: monaco.MarkerSeverity.Error,
       startColumn: start.column,
-      startLineNumber: start.lineNumber,
-    },
-  ];
+      startLineNumber: start.lineNumber
+    }
+  ]
 }
 
 function waitForMarkers(fn: () => void): Promise<monaco.editor.IMarker[]> {
   const markersPromise = new Promise<monaco.editor.IMarker[]>((resolve) => {
     const markerChangeListener = monaco.editor.onDidChangeMarkers(() => {
-      markerChangeListener.dispose();
-      resolve(monaco.editor.getModelMarkers({}));
-    });
+      markerChangeListener.dispose()
+      resolve(monaco.editor.getModelMarkers({}))
+    })
     setTimeout(() => {
-      markerChangeListener.dispose();
-      resolve([]);
-    }, 1000);
-  });
-  fn();
-  return markersPromise;
+      markerChangeListener.dispose()
+      resolve([])
+    }, 1000)
+  })
+  fn()
+  return markersPromise
 }
 
 test('provide marker data when a model is created', async () => {
   disposable = registerMarkerDataProvider(monaco, '*', {
     owner: 'test',
-    provideMarkerData,
-  });
+    provideMarkerData
+  })
 
-  const uri = monaco.Uri.parse('file:///test.txt');
+  const uri = monaco.Uri.parse('file:///test.txt')
   const markers = await waitForMarkers(() => {
-    monaco.editor.createModel('bad', '', uri);
-  });
+    monaco.editor.createModel('bad', '', uri)
+  })
   expect(markers).toStrictEqual([
     {
       code: undefined,
@@ -70,21 +70,21 @@ test('provide marker data when a model is created', async () => {
       source: undefined,
       startColumn: 1,
       startLineNumber: 1,
-      tags: undefined,
-    },
-  ]);
-});
+      tags: undefined
+    }
+  ])
+})
 
 test('provide marker data for pre-existing models', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  monaco.editor.createModel('bad', '', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  monaco.editor.createModel('bad', '', uri)
 
   const markers = await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, '*', {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
 
   expect(markers).toStrictEqual([
     {
@@ -99,24 +99,24 @@ test('provide marker data for pre-existing models', async () => {
       source: undefined,
       startColumn: 1,
       startLineNumber: 1,
-      tags: undefined,
-    },
-  ]);
-});
+      tags: undefined
+    }
+  ])
+})
 
 test('provide marker data for updated models', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  const model = monaco.editor.createModel('', '', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  const model = monaco.editor.createModel('', '', uri)
 
   await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, '*', {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
   const markers = await waitForMarkers(() => {
-    model.setValue('bad');
-  });
+    model.setValue('bad')
+  })
 
   expect(markers).toStrictEqual([
     {
@@ -131,42 +131,42 @@ test('provide marker data for updated models', async () => {
       source: undefined,
       startColumn: 1,
       startLineNumber: 1,
-      tags: undefined,
-    },
-  ]);
-});
+      tags: undefined
+    }
+  ])
+})
 
 test('clear marker data for disposed models', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  const model = monaco.editor.createModel('bad', '', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  const model = monaco.editor.createModel('bad', '', uri)
 
   await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, '*', {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
   const markers = await waitForMarkers(() => {
-    model.dispose();
-  });
+    model.dispose()
+  })
 
-  expect(markers).toStrictEqual([]);
-});
+  expect(markers).toStrictEqual([])
+})
 
 test('provide marker data if the model language changes', async () => {
-  const uri = monaco.Uri.parse('file:///test.bla');
-  monaco.editor.createModel('bad', undefined, uri);
+  const uri = monaco.Uri.parse('file:///test.bla')
+  monaco.editor.createModel('bad', undefined, uri)
 
   await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, 'bla', {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
 
   const markers = await waitForMarkers(() => {
-    monaco.languages.register({ id: 'bla', extensions: ['.bla'] });
-  });
+    monaco.languages.register({ id: 'bla', extensions: ['.bla'] })
+  })
 
   expect(markers).toStrictEqual([
     {
@@ -181,21 +181,21 @@ test('provide marker data if the model language changes', async () => {
       source: undefined,
       startColumn: 1,
       startLineNumber: 1,
-      tags: undefined,
-    },
-  ]);
-});
+      tags: undefined
+    }
+  ])
+})
 
 test('language filter string match', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  monaco.editor.createModel('bad', 'plaintext', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  monaco.editor.createModel('bad', 'plaintext', uri)
 
   const markers = await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, 'plaintext', {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
 
   expect(markers).toStrictEqual([
     {
@@ -210,35 +210,35 @@ test('language filter string match', async () => {
       source: undefined,
       startColumn: 1,
       startLineNumber: 1,
-      tags: undefined,
-    },
-  ]);
-});
+      tags: undefined
+    }
+  ])
+})
 
 test('language filter string mismatch', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  monaco.editor.createModel('bad', 'plaintext', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  monaco.editor.createModel('bad', 'plaintext', uri)
 
   const markers = await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, 'notplaintext', {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
 
-  expect(markers).toStrictEqual([]);
-});
+  expect(markers).toStrictEqual([])
+})
 
 test('language filter array match', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  monaco.editor.createModel('bad', 'plaintext', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  monaco.editor.createModel('bad', 'plaintext', uri)
 
   const markers = await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, ['plaintext'], {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
 
   expect(markers).toStrictEqual([
     {
@@ -253,21 +253,21 @@ test('language filter array match', async () => {
       source: undefined,
       startColumn: 1,
       startLineNumber: 1,
-      tags: undefined,
-    },
-  ]);
-});
+      tags: undefined
+    }
+  ])
+})
 
 test('language filter array mismatch', async () => {
-  const uri = monaco.Uri.parse('file:///test.txt');
-  monaco.editor.createModel('bad', 'plaintext', uri);
+  const uri = monaco.Uri.parse('file:///test.txt')
+  monaco.editor.createModel('bad', 'plaintext', uri)
 
   const markers = await waitForMarkers(() => {
     disposable = registerMarkerDataProvider(monaco, ['notplaintext'], {
       owner: 'test',
-      provideMarkerData,
-    });
-  });
+      provideMarkerData
+    })
+  })
 
-  expect(markers).toStrictEqual([]);
-});
+  expect(markers).toStrictEqual([])
+})

@@ -1,4 +1,4 @@
-import { type editor, type IDisposable, type languages } from 'monaco-editor';
+import { type editor, type IDisposable, type languages } from 'monaco-editor'
 
 export interface MarkerDataProvider {
   /**
@@ -6,7 +6,7 @@ export interface MarkerDataProvider {
    *
    * This should be a unique string that identifies the context of who owns the marker data.
    */
-  owner: string;
+  owner: string
 
   /**
    * Provide marker data for the given model.
@@ -16,7 +16,7 @@ export interface MarkerDataProvider {
    * @returns
    *   The new marker data for the model.
    */
-  provideMarkerData: (model: editor.ITextModel) => languages.ProviderResult<editor.IMarkerData[]>;
+  provideMarkerData: (model: editor.ITextModel) => languages.ProviderResult<editor.IMarkerData[]>
 
   /**
    * Reset the state for a model.
@@ -24,7 +24,7 @@ export interface MarkerDataProvider {
    * @param model
    *   The model to reset the state for.
    */
-  doReset?: (model: editor.ITextModel) => void;
+  doReset?: (model: editor.ITextModel) => void
 }
 
 /**
@@ -42,82 +42,82 @@ export interface MarkerDataProvider {
 export function registerMarkerDataProvider(
   monaco: Pick<typeof import('monaco-editor'), 'editor' | 'Uri'>,
   languageSelector: string[] | string,
-  provider: MarkerDataProvider,
+  provider: MarkerDataProvider
 ): IDisposable {
-  const listeners = new Map<string, IDisposable>();
+  const listeners = new Map<string, IDisposable>()
 
   const matchesLanguage = (model: editor.ITextModel): boolean => {
     if (languageSelector === '*') {
-      return true;
+      return true
     }
-    const languageId = model.getLanguageId();
+    const languageId = model.getLanguageId()
     return Array.isArray(languageSelector)
       ? languageSelector.includes(languageId)
-      : languageSelector === languageId;
-  };
+      : languageSelector === languageId
+  }
 
   const doValidate = async (model: editor.ITextModel): Promise<void> => {
-    const markers = await provider.provideMarkerData(model);
+    const markers = await provider.provideMarkerData(model)
     // The model have have been disposed by the time marker data has been fetched.
     if (!model.isDisposed() && matchesLanguage(model)) {
-      monaco.editor.setModelMarkers(model, provider.owner, markers ?? []);
+      monaco.editor.setModelMarkers(model, provider.owner, markers ?? [])
     }
-  };
+  }
 
   const onModelAdd = (model: editor.ITextModel): void => {
     if (!matchesLanguage(model)) {
-      return;
+      return
     }
 
-    let handle: ReturnType<typeof setTimeout>;
+    let handle: ReturnType<typeof setTimeout>
     listeners.set(
       String(model.uri),
       model.onDidChangeContent(() => {
-        clearTimeout(handle);
+        clearTimeout(handle)
         handle = setTimeout(() => {
-          doValidate(model);
-        }, 500);
-      }),
-    );
+          doValidate(model)
+        }, 500)
+      })
+    )
 
-    doValidate(model);
-  };
+    doValidate(model)
+  }
 
   const onModelRemoved = (model: editor.ITextModel): void => {
-    monaco.editor.setModelMarkers(model, provider.owner, []);
-    const uriStr = String(model.uri);
-    const listener = listeners.get(uriStr);
+    monaco.editor.setModelMarkers(model, provider.owner, [])
+    const uriStr = String(model.uri)
+    const listener = listeners.get(uriStr)
     if (listener) {
-      listener.dispose();
-      listeners.delete(uriStr);
+      listener.dispose()
+      listeners.delete(uriStr)
     }
-  };
+  }
 
   const disposables = [
     monaco.editor.onDidCreateModel(onModelAdd),
     monaco.editor.onWillDisposeModel((model) => {
-      onModelRemoved(model);
-      provider.doReset?.(model);
+      onModelRemoved(model)
+      provider.doReset?.(model)
     }),
     monaco.editor.onDidChangeModelLanguage((event) => {
-      onModelRemoved(event.model);
-      onModelAdd(event.model);
-      provider.doReset?.(event.model);
-    }),
-  ];
+      onModelRemoved(event.model)
+      onModelAdd(event.model)
+      provider.doReset?.(event.model)
+    })
+  ]
 
   for (const model of monaco.editor.getModels()) {
-    onModelAdd(model);
+    onModelAdd(model)
   }
 
   return {
     dispose() {
       for (const uri of listeners.keys()) {
-        onModelRemoved(monaco.editor.getModel(monaco.Uri.parse(uri))!);
+        onModelRemoved(monaco.editor.getModel(monaco.Uri.parse(uri))!)
       }
       while (disposables.length) {
-        disposables.pop()!.dispose();
+        disposables.pop()!.dispose()
       }
-    },
-  };
+    }
+  }
 }
