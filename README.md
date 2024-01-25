@@ -7,6 +7,20 @@
 
 Provider marker data for Monaco models.
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+  - [`registerMarkerDataProvider(monaco, languageId, provider)`](#registermarkerdataprovidermonaco-languageid-provider)
+    - [Options](#options)
+- [Types](#types)
+  - [`MarkerDataProvider`](#markerdataprovider)
+- [License](#license)
+
+## Introduction
+
 Monaco editor supports marker data to highlight parts of a document using squiggly lines. This is
 analogous to diagnostics in the language server protocol. Monaco editor itself only supports this
 through the `editor.setModelMarkers` function. This allows users to set marker data even if a file
