@@ -9,10 +9,7 @@
     "start": "vitest",
     "test": "vitest run"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/remcohaszing/monaco-marker-data-provider.git"
-  },
+  "repository": "remcohaszing/monaco-marker-data-provider",
   "keywords": [
     "diagnostics",
     "monaco",
@@ -21,13 +18,9 @@
   ],
   "author": "Remco Haszing <remcohaszing@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/remcohaszing/monaco-marker-data-provider/issues"
-  },
+  "bugs": "https://github.com/remcohaszing/monaco-marker-data-provider/issues",
   "homepage": "https://github.com/remcohaszing/monaco-marker-data-provider#readme",
-  "funding": {
-    "url": "https://github.com/sponsors/remcohaszing"
-  },
+  "funding": "https://github.com/sponsors/remcohaszing",
   "files": [
     "index.js",
     "index.d.ts"
