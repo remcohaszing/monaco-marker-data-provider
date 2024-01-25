@@ -32,8 +32,11 @@
     "index.js",
     "index.d.ts"
   ],
+  "dependencies": {
+    "monaco-types": "^0.1.0"
+  },
   "peerDependencies": {
-    "monaco-editor": ">=0.30.0"
+    "monaco-editor-core": ">=0.30.0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^1.0.0",

@@ -1,4 +1,4 @@
-import { type editor, type IDisposable, type languages } from 'monaco-editor'
+import { type editor, type IDisposable, type languages, type MonacoEditor } from 'monaco-types'
 
 export interface MarkerDataProvider {
   /**
@@ -40,7 +40,7 @@ export interface MarkerDataProvider {
  *   A disposable.
  */
 export function registerMarkerDataProvider(
-  monaco: Pick<typeof import('monaco-editor'), 'editor' | 'Uri'>,
+  monaco: Pick<MonacoEditor, 'editor' | 'Uri'>,
   languageSelector: string[] | string,
   provider: MarkerDataProvider
 ): IDisposable {
