@@ -34,7 +34,7 @@ function provideMarkerData(model: monaco.editor.ITextModel): monaco.editor.IMark
   ]
 }
 
-function waitForMarkers(fn: () => void): Promise<monaco.editor.IMarker[]> {
+function waitForMarkers(fn: () => unknown): Promise<monaco.editor.IMarker[]> {
   const markersPromise = new Promise<monaco.editor.IMarker[]>((resolve) => {
     const markerChangeListener = monaco.editor.onDidChangeMarkers(() => {
       markerChangeListener.dispose()

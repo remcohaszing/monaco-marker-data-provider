@@ -24,7 +24,7 @@ export interface MarkerDataProvider {
    * @param model
    *   The model to reset the state for.
    */
-  doReset?: (model: editor.ITextModel) => void
+  doReset?: (model: editor.ITextModel) => unknown
 }
 
 export interface MarkerDataProviderInstance extends IDisposable {
@@ -63,7 +63,7 @@ export function registerMarkerDataProvider(
       : languageSelector === languageId
   }
 
-  const doValidate = async (model: editor.ITextModel): Promise<void> => {
+  const doValidate = async (model: editor.ITextModel): Promise<undefined> => {
     const markers = await provider.provideMarkerData(model)
     // The model have have been disposed by the time marker data has been fetched.
     if (!model.isDisposed() && matchesLanguage(model)) {
@@ -71,7 +71,7 @@ export function registerMarkerDataProvider(
     }
   }
 
-  const onModelAdd = (model: editor.ITextModel): void => {
+  const onModelAdd = (model: editor.ITextModel): undefined => {
     if (!matchesLanguage(model)) {
       return
     }
@@ -90,7 +90,7 @@ export function registerMarkerDataProvider(
     doValidate(model)
   }
 
-  const onModelRemoved = (model: editor.ITextModel): void => {
+  const onModelRemoved = (model: editor.ITextModel): undefined => {
     monaco.editor.setModelMarkers(model, provider.owner, [])
     const listener = listeners.get(model)
     if (listener) {
