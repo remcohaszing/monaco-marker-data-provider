@@ -1,7 +1,6 @@
-import * as monaco from 'monaco-editor-core/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor-core/esm/vs/editor/editor.api.js'
+import { registerMarkerDataProvider } from 'monaco-marker-data-provider'
 import { afterEach, expect, test } from 'vitest'
-
-import { registerMarkerDataProvider } from './index.js'
 
 let disposable: monaco.IDisposable | undefined
 

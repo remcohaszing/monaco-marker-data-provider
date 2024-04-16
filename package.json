@@ -3,10 +3,10 @@
   "version": "1.1.1",
   "description": "Provide Monaco marker data in a similar way as other integrations",
   "type": "module",
-  "exports": "./index.js",
+  "exports": "./dist/monaco-marker-data-provider.js",
   "scripts": {
-    "prepack": "tsc --noEmit false",
-    "start": "vitest",
+    "prepack": "tsc --build",
+    "pretest": "tsc --build",
     "test": "vitest run"
   },
   "repository": "remcohaszing/monaco-marker-data-provider",
@@ -22,8 +22,10 @@
   "homepage": "https://github.com/remcohaszing/monaco-marker-data-provider#readme",
   "funding": "https://github.com/sponsors/remcohaszing",
   "files": [
-    "index.js",
-    "index.d.ts"
+    "src",
+    "dist",
+    "!tsconfig.json",
+    "!*.tsbuildinfo"
   ],
   "dependencies": {
     "monaco-types": "^0.1.0"
