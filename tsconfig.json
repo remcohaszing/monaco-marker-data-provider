@@ -3,7 +3,6 @@
   "exclude": ["src"],
   "compilerOptions": {
     "declaration": true,
-    "lib": ["dom", "esnext", "dom.iterable"],
     "module": "nodenext",
     "noEmit": true,
     "strict": true

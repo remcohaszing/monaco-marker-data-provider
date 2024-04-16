@@ -3,7 +3,6 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "nodenext",
     "outDir": "../dist",
     "sourceMap": true,
