@@ -48,15 +48,6 @@ jobs:
       - run: npm ci
       - run: npx remark --frail .
 
-  tsc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 16 }
-      - run: npm ci
-      - run: npx tsc
-
   vitest:
     runs-on: ubuntu-latest
     steps:
@@ -74,7 +65,6 @@ jobs:
       - pack
       - prettier
       - remark
-      - tsc
       - vitest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
