@@ -30,13 +30,11 @@
   "dependencies": {
     "monaco-types": "^0.1.0"
   },
-  "peerDependencies": {
-    "monaco-editor-core": ">=0.30.0"
-  },
   "devDependencies": {
     "eslint": "^8.0.0",
     "eslint-config-remcohaszing": "^10.0.0",
     "jsdom": "^24.0.0",
+    "monaco-editor-core": "^0.47.0",
     "prettier": "^3.0.0",
     "remark-cli": "^12.0.0",
     "remark-preset-remcohaszing": "^3.0.0",
