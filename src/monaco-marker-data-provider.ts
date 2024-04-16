@@ -64,9 +64,10 @@ export function registerMarkerDataProvider(
   }
 
   const doValidate = async (model: editor.ITextModel): Promise<undefined> => {
+    const versionId = model.getVersionId()
     const markers = await provider.provideMarkerData(model)
-    // The model have have been disposed by the time marker data has been fetched.
-    if (!model.isDisposed() && matchesLanguage(model)) {
+    // The model may have been updated disposed by the time marker data has been fetched.
+    if (versionId === model.getVersionId() && !model.isDisposed() && matchesLanguage(model)) {
       monaco.editor.setModelMarkers(model, provider.owner, markers ?? [])
     }
   }
