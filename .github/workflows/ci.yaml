@@ -55,8 +55,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: npm ci
-      - run: npx vitest run --coverage
-      - uses: codecov/codecov-action@v3
+      - run: npm test
 
   release:
     runs-on: ubuntu-latest

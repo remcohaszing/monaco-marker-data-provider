@@ -1,7 +1,6 @@
 # Monaco marker data provider
 
 [![ci workflow](https://github.com/remcohaszing/monaco-marker-data-provider/actions/workflows/ci.yaml/badge.svg)](https://github.com/remcohaszing/monaco-marker-data-provider/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/remcohaszing/monaco-marker-data-provider/branch/main/graph/badge.svg)](https://codecov.io/gh/remcohaszing/monaco-marker-data-provider)
 [![npm version](https://img.shields.io/npm/v/monaco-marker-data-provider)](https://www.npmjs.com/package/monaco-marker-data-provider)
 [![npm downloads](https://img.shields.io/npm/dm/monaco-marker-data-provider)](https://www.npmjs.com/package/monaco-marker-data-provider)
 
