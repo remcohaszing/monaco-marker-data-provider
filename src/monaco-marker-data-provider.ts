@@ -27,6 +27,13 @@ export interface MarkerDataProvider {
   doReset?: (model: editor.ITextModel) => void
 }
 
+export interface MarkerDataProviderInstance extends IDisposable {
+  /**
+   * Revalidate all models.
+   */
+  revalidate: () => Promise<undefined>
+}
+
 /**
  * Register a marker data provider that can provide marker data for a model.
  *
@@ -43,7 +50,7 @@ export function registerMarkerDataProvider(
   monaco: Pick<MonacoEditor, 'editor'>,
   languageSelector: string[] | string,
   provider: MarkerDataProvider
-): IDisposable {
+): MarkerDataProviderInstance {
   const listeners = new Map<editor.ITextModel, IDisposable>()
 
   const matchesLanguage = (model: editor.ITextModel): boolean => {
@@ -115,6 +122,10 @@ export function registerMarkerDataProvider(
       onDidCreateModel.dispose()
       onWillDisposeModel.dispose()
       onDidChangeModelLanguage.dispose()
+    },
+
+    async revalidate() {
+      await Promise.all(monaco.editor.getModels().map(doValidate))
     }
   }
 }

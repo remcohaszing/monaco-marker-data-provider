@@ -1,8 +1,11 @@
 import * as monaco from 'monaco-editor-core/esm/vs/editor/editor.api.js'
-import { registerMarkerDataProvider } from 'monaco-marker-data-provider'
+import {
+  type MarkerDataProviderInstance,
+  registerMarkerDataProvider
+} from 'monaco-marker-data-provider'
 import { afterEach, expect, test } from 'vitest'
 
-let disposable: monaco.IDisposable | undefined
+let disposable: MarkerDataProviderInstance | undefined
 
 afterEach(() => {
   disposable?.dispose()
@@ -269,4 +272,38 @@ test('language filter array mismatch', async () => {
   })
 
   expect(markers).toStrictEqual([])
+})
+
+test('revalidate', async () => {
+  const uri = monaco.Uri.parse('file:///test.txt')
+  const model = monaco.editor.createModel('good', 'plaintext', uri)
+
+  const markers = await waitForMarkers(() => {
+    disposable = registerMarkerDataProvider(monaco, ['plaintext'], {
+      owner: 'test',
+      provideMarkerData
+    })
+  })
+
+  expect(markers).toStrictEqual([])
+
+  model.setValue('bad')
+  await disposable?.revalidate()
+
+  expect(monaco.editor.getModelMarkers({})).toStrictEqual([
+    {
+      code: undefined,
+      endColumn: 4,
+      endLineNumber: 1,
+      message: 'test message',
+      owner: 'test',
+      relatedInformation: undefined,
+      resource: uri,
+      severity: 8,
+      source: undefined,
+      startColumn: 1,
+      startLineNumber: 1,
+      tags: undefined
+    }
+  ])
 })

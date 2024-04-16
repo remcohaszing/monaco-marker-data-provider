@@ -15,8 +15,10 @@ Provider marker data for Monaco models.
 - [API](#api)
   - [`registerMarkerDataProvider(monaco, languageId, provider)`](#registermarkerdataprovidermonaco-languageid-provider)
     - [Options](#options)
+    - [Returns](#returns)
 - [Types](#types)
   - [`MarkerDataProvider`](#markerdataprovider)
+  - [`MarkerDataProviderInstance`](#markerdataproviderinstance)
 - [License](#license)
 
 ## Introduction
@@ -66,6 +68,10 @@ This function returns a disposable.
 - `languageId` (`string`): The language id to register the provider for.
 - `provider` (`MarkerDataProvider`): The object which provides Monaco marker data.
 
+#### Returns
+
+A [`MarkerDataProviderInstance`](#markerdataproviderinstance) instance
+
 ## Types
 
 ### `MarkerDataProvider`
@@ -77,6 +83,12 @@ An object with the following properties:
 - `provideMarkerData`: A function which provides marker data for the given model. It must return
   `null`, `undefined`, a list of marker data, or a promise that returns those values.
 - `doReset`: An optional function to perform a reset after a model has been removed.
+
+### `MarkerDataProviderInstance`
+
+A disposable with the following properties:
+
+- `revalidate`: A function to revalidate all models.
 
 ## License
 
