@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 16 }
+        with: { node-version: 20 }
       - run: npm ci
       - run: npx tsc --build
       - run: npx eslint .
@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 16 }
+        with: { node-version: 20 }
       - run: npm ci
       - run: npm pack
       - uses: actions/upload-artifact@v4
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 16 }
+        with: { node-version: 20 }
       - run: npm ci
       - run: npx prettier --check .
 
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 16 }
+        with: { node-version: 20 }
       - run: npm ci
       - run: npx remark --frail .
 
@@ -53,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 16 }
+        with: { node-version: 20 }
       - run: npm ci
       - run: npx vitest run --coverage
       - uses: codecov/codecov-action@v3
@@ -70,7 +70,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org
       - uses: actions/download-artifact@v4
         with: { name: package }
