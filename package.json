@@ -1,6 +1,6 @@
 {
   "name": "monaco-marker-data-provider",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Provide Monaco marker data in a similar way as other integrations",
   "type": "module",
   "exports": "./dist/monaco-marker-data-provider.js",
