@@ -14,6 +14,14 @@ afterEach(() => {
   }
 })
 
+/**
+ * A marker data provider that reports the substring `bad`.
+ *
+ * @param model
+ *   The model to validate.
+ * @returns
+ *   The marker data.
+ */
 function provideMarkerData(model: monaco.editor.ITextModel): monaco.editor.IMarkerData[] {
   const value = model.getValue()
   const index = value.indexOf('bad')
@@ -34,6 +42,14 @@ function provideMarkerData(model: monaco.editor.ITextModel): monaco.editor.IMark
   ]
 }
 
+/**
+ * Wait for markers to be updated.
+ *
+ * @param fn
+ *   A function to run that should trigger the update.
+ * @returns
+ *   The updated markers.
+ */
 function waitForMarkers(fn: () => unknown): Promise<monaco.editor.IMarker[]> {
   const markersPromise = new Promise<monaco.editor.IMarker[]>((resolve) => {
     const markerChangeListener = monaco.editor.onDidChangeMarkers(() => {
