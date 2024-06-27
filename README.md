@@ -13,8 +13,6 @@ Provider marker data for Monaco models.
 - [Usage](#usage)
 - [API](#api)
   - [`registerMarkerDataProvider(monaco, languageId, provider)`](#registermarkerdataprovidermonaco-languageid-provider)
-    - [Options](#options)
-    - [Returns](#returns)
 - [Types](#types)
   - [`MarkerDataProvider`](#markerdataprovider)
   - [`MarkerDataProviderInstance`](#markerdataproviderinstance)
