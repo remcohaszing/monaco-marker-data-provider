@@ -78,15 +78,19 @@ export function registerMarkerDataProvider(
     }
 
     let handle: ReturnType<typeof setTimeout>
-    listeners.set(
-      model,
-      model.onDidChangeContent(() => {
+    const onDidChangeContent = model.onDidChangeContent(() => {
+      clearTimeout(handle)
+      handle = setTimeout(() => {
+        doValidate(model)
+      }, 500)
+    })
+
+    listeners.set(model, {
+      dispose() {
         clearTimeout(handle)
-        handle = setTimeout(() => {
-          doValidate(model)
-        }, 500)
-      })
-    )
+        onDidChangeContent.dispose()
+      }
+    })
 
     doValidate(model)
   }
