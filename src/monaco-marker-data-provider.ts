@@ -109,10 +109,10 @@ export function registerMarkerDataProvider(
     onModelRemoved(model)
     provider.doReset?.(model)
   })
-  const onDidChangeModelLanguage = monaco.editor.onDidChangeModelLanguage((event) => {
-    onModelRemoved(event.model)
-    onModelAdd(event.model)
-    provider.doReset?.(event.model)
+  const onDidChangeModelLanguage = monaco.editor.onDidChangeModelLanguage(({ model }) => {
+    onModelRemoved(model)
+    onModelAdd(model)
+    provider.doReset?.(model)
   })
 
   for (const model of monaco.editor.getModels()) {
