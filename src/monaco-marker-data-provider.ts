@@ -67,7 +67,7 @@ export function registerMarkerDataProvider(
     const versionId = model.getVersionId()
     const markers = await provider.provideMarkerData(model)
     // The model may have been updated disposed by the time marker data has been fetched.
-    if (versionId === model.getVersionId() && !model.isDisposed() && matchesLanguage(model)) {
+    if (!model.isDisposed() && versionId === model.getVersionId() && matchesLanguage(model)) {
       monaco.editor.setModelMarkers(model, provider.owner, markers ?? [])
     }
   }
