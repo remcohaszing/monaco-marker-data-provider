@@ -1,5 +1,5 @@
 {
-  "references": [{ "path": "./src/tsconfig.json" }],
+  "references": [{ "path": "./tsconfig.build.json" }],
   "exclude": ["src"],
   "compilerOptions": {
     "declaration": true,

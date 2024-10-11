@@ -23,9 +23,7 @@
   "funding": "https://github.com/sponsors/remcohaszing",
   "files": [
     "src",
-    "dist",
-    "!tsconfig.json",
-    "!*.tsbuildinfo"
+    "dist"
   ],
   "dependencies": {
     "monaco-types": "^0.1.0"
