@@ -16,7 +16,9 @@ export interface MarkerDataProvider {
    * @returns
    *   The new marker data for the model.
    */
-  provideMarkerData: (model: editor.ITextModel) => languages.ProviderResult<editor.IMarkerData[]>
+  provideMarkerData: (
+    model: editor.ITextModel
+  ) => languages.ProviderResult<editor.IMarkerData[] | void>
 
   /**
    * Reset the state for a model.
