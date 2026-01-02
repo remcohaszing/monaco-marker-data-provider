@@ -51,6 +51,7 @@ jobs:
           node-version: 24
       - run: npm ci
       - run: npx remark --frail .
+      - uses: codecov/codecov-action@v5
 
   vitest:
     runs-on: ubuntu-latest
@@ -60,7 +61,7 @@ jobs:
         with:
           node-version: 24
       - run: npm ci
-      - run: npx playwright install
+      - run: npx playwright install chromium
       - run: npm test
 
   release:

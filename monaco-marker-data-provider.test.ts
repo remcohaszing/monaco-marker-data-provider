@@ -1,6 +1,6 @@
 import type { MarkerDataProviderInstance } from 'monaco-marker-data-provider'
 
-import * as monaco from 'monaco-editor-core/esm/vs/editor/editor.api.js'
+import * as monaco from 'monaco-editor-core'
 import { registerMarkerDataProvider } from 'monaco-marker-data-provider'
 import { afterEach, expect, test } from 'vitest'
 
