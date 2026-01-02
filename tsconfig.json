@@ -2,9 +2,9 @@
   "references": [{ "path": "./tsconfig.build.json" }],
   "exclude": ["src"],
   "compilerOptions": {
-    "declaration": true,
     "module": "nodenext",
     "noEmit": true,
-    "strict": true
+    "strict": true,
+    "verbatimModuleSyntax": true
   }
 }
