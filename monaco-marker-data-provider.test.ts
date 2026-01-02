@@ -93,6 +93,34 @@ test('provide marker data when a model is created', async () => {
   ])
 })
 
+test('provide undefined marker data', async () => {
+  disposable = registerMarkerDataProvider(monaco, '*', {
+    owner: 'test',
+    provideMarkerData() {
+      // This tests returning undefined.
+    }
+  })
+
+  const uri = monaco.Uri.parse('file:///test.txt')
+  const markers = await waitForMarkers(() => {
+    monaco.editor.createModel('', '', uri)
+  })
+  expect(markers).toStrictEqual([])
+})
+
+test('provide null marker data', async () => {
+  disposable = registerMarkerDataProvider(monaco, '*', {
+    owner: 'test',
+    provideMarkerData: () => null
+  })
+
+  const uri = monaco.Uri.parse('file:///test.txt')
+  const markers = await waitForMarkers(() => {
+    monaco.editor.createModel('', '', uri)
+  })
+  expect(markers).toStrictEqual([])
+})
+
 test('provide marker data for pre-existing models', async () => {
   const uri = monaco.Uri.parse('file:///test.txt')
   monaco.editor.createModel('bad', '', uri)
