@@ -55,11 +55,11 @@ export function registerMarkerDataProvider(
 ): MarkerDataProviderInstance {
   const listeners = new Map<editor.ITextModel, IDisposable>()
 
-  const matchesLanguage = (model: editor.ITextModel): boolean => {
+  const matchesLanguage = (languageId: string): boolean => {
     if (languageSelector === '*') {
       return true
     }
-    const languageId = model.getLanguageId()
+
     return Array.isArray(languageSelector)
       ? languageSelector.includes(languageId)
       : languageSelector === languageId
@@ -69,13 +69,17 @@ export function registerMarkerDataProvider(
     const versionId = model.getVersionId()
     const markers = await provider.provideMarkerData(model)
     // The model may have been updated disposed by the time marker data has been fetched.
-    if (!model.isDisposed() && versionId === model.getVersionId() && matchesLanguage(model)) {
+    if (
+      !model.isDisposed() &&
+      versionId === model.getVersionId() &&
+      matchesLanguage(model.getLanguageId())
+    ) {
       monaco.editor.setModelMarkers(model, provider.owner, markers ?? [])
     }
   }
 
   const onModelAdd = (model: editor.ITextModel): undefined => {
-    if (!matchesLanguage(model)) {
+    if (!matchesLanguage(model.getLanguageId())) {
       return
     }
 
@@ -106,16 +110,32 @@ export function registerMarkerDataProvider(
     }
   }
 
+  /**
+   * Call `doReset` on the provider if the model language matches.
+   *
+   * @param model
+   *   The model to reset
+   * @param languageId
+   *   The language ID to check.
+   */
+  function doReset(model: editor.ITextModel, languageId = model.getLanguageId()): undefined {
+    if (provider.doReset && matchesLanguage(languageId)) {
+      provider.doReset(model)
+    }
+  }
+
   const onDidCreateModel = monaco.editor.onDidCreateModel(onModelAdd)
   const onWillDisposeModel = monaco.editor.onWillDisposeModel((model) => {
     onModelRemoved(model)
-    provider.doReset?.(model)
+    doReset(model)
   })
-  const onDidChangeModelLanguage = monaco.editor.onDidChangeModelLanguage(({ model }) => {
-    onModelRemoved(model)
-    onModelAdd(model)
-    provider.doReset?.(model)
-  })
+  const onDidChangeModelLanguage = monaco.editor.onDidChangeModelLanguage(
+    ({ model, oldLanguage }) => {
+      onModelRemoved(model)
+      onModelAdd(model)
+      doReset(model, oldLanguage)
+    }
+  )
 
   for (const model of monaco.editor.getModels()) {
     onModelAdd(model)

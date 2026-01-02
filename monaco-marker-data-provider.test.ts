@@ -2,7 +2,7 @@ import type { MarkerDataProviderInstance } from 'monaco-marker-data-provider'
 
 import * as monaco from 'monaco-editor-core'
 import { registerMarkerDataProvider } from 'monaco-marker-data-provider'
-import { afterEach, expect, test } from 'vitest'
+import { afterEach, expect, test, vi } from 'vitest'
 
 let disposable: MarkerDataProviderInstance | undefined
 
@@ -199,6 +199,25 @@ test('clear marker data for disposed models', async () => {
   })
 
   expect(markers).toStrictEqual([])
+})
+
+test('call onReset if a model is disposed', async () => {
+  const uri = monaco.Uri.parse('file:///test.txt')
+  const model = monaco.editor.createModel('bad', '', uri)
+  const doReset = vi.fn()
+
+  await waitForMarkers(() => {
+    disposable = registerMarkerDataProvider(monaco, '*', {
+      owner: 'test',
+      doReset,
+      provideMarkerData
+    })
+  })
+  await waitForMarkers(() => {
+    model.dispose()
+  })
+
+  expect(doReset).toHaveBeenCalledWith(model)
 })
 
 test('provide marker data if the model language changes', async () => {
