@@ -1,4 +1,4 @@
-import { type editor, type IDisposable, type languages, type MonacoEditor } from 'monaco-types'
+import type { editor, IDisposable, languages, MonacoEditor } from 'monaco-types'
 
 export interface MarkerDataProvider {
   /**
@@ -48,7 +48,7 @@ export interface MarkerDataProviderInstance extends IDisposable {
  */
 export function registerMarkerDataProvider(
   monaco: Pick<MonacoEditor, 'editor'>,
-  languageSelector: string[] | string,
+  languageSelector: string | string[],
   provider: MarkerDataProvider
 ): MarkerDataProviderInstance {
   const listeners = new Map<editor.ITextModel, IDisposable>()

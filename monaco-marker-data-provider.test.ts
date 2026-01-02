@@ -1,8 +1,7 @@
+import type { MarkerDataProviderInstance } from 'monaco-marker-data-provider'
+
 import * as monaco from 'monaco-editor-core/esm/vs/editor/editor.api.js'
-import {
-  type MarkerDataProviderInstance,
-  registerMarkerDataProvider
-} from 'monaco-marker-data-provider'
+import { registerMarkerDataProvider } from 'monaco-marker-data-provider'
 import { afterEach, expect, test } from 'vitest'
 
 let disposable: MarkerDataProviderInstance | undefined
@@ -81,6 +80,7 @@ test('provide marker data when a model is created', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,
@@ -110,6 +110,7 @@ test('provide marker data for pre-existing models', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,
@@ -142,6 +143,7 @@ test('provide marker data for updated models', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,
@@ -192,6 +194,7 @@ test('provide marker data if the model language changes', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,
@@ -221,6 +224,7 @@ test('language filter string match', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,
@@ -264,6 +268,7 @@ test('language filter array match', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,
@@ -312,6 +317,7 @@ test('revalidate', async () => {
       endColumn: 4,
       endLineNumber: 1,
       message: 'test message',
+      origin: undefined,
       owner: 'test',
       relatedInformation: undefined,
       resource: uri,

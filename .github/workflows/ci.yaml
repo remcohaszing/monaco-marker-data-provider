@@ -16,7 +16,7 @@ jobs:
           node-version: 24
       - run: npm ci
       - run: npx tsc --build
-      - run: npx eslint .
+      - run: npx eslint
 
   pack:
     runs-on: ubuntu-latest
