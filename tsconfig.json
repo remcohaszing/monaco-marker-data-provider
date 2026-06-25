@@ -4,7 +4,6 @@
   "compilerOptions": {
     "module": "nodenext",
     "noEmit": true,
-    "strict": true,
     "verbatimModuleSyntax": true
   }
 }
