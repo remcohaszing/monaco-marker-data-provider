@@ -80,4 +80,4 @@ jobs:
           node-version: 24
       - uses: actions/download-artifact@v7
         with: { name: package }
-      - run: npm publish *.tgz
+      - run: npm stage publish *.tgz
